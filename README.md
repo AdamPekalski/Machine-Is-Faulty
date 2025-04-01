@@ -2,6 +2,7 @@
 Java OOP CA project 
   
 Outline
+
 • The purpose of the assignment is to build a GUI prediction tool that predicts an outcome, based on theme 
   you have been given. For example, if your theme was LoanApproval - the predictor will be about 
   predicting whether a user of the application will be approved for the loan (and the probability), based on 
@@ -9,9 +10,14 @@ Outline
   Effectively, you will be building a supervised machine learning classifier 
   based on the naïve bayes classifier.
 
+
+
 (Given theme is -> MachineIsFaulty)
 
+
+
 Assignment criteria
+
 • All of your assignment to be written in Java. 
 
 • Your code should demonstrate the use of OO concepts where appropriate (separate classes, 
