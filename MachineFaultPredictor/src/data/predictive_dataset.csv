@@ -1,0 +1,19 @@
+Count of TemperatureHigh,,,,MachineIsFaulty,,
+TemperatureHigh,Overloaded,VibrationDetected,PressureHigh,no,yes,Grand Total
+no,no,no,no,12,,12
+no,no,no,yes,12,,12
+no,no,yes,no,12,,12
+no,no,yes,yes,12,,12
+no,yes,no,no,12,,12
+no,yes,no,yes,12,,12
+no,yes,yes,no,12,,12
+no,yes,yes,yes,,12,12
+yes,no,no,no,13,,13
+yes,no,no,yes,13,,13
+yes,no,yes,no,13,,13
+yes,no,yes,yes,,13,13
+yes,yes,no,no,13,,13
+yes,yes,no,yes,,13,13
+yes,yes,yes,no,,13,13
+yes,yes,yes,yes,,13,13
+Grand Total,,,,136,64,200
