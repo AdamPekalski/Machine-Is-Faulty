@@ -16,6 +16,7 @@ public class Main {
             String dataPath = "data/rule_based_predictive_dataset.csv";
             List<MachineData> allData = preprocessor.loadData(dataPath);
             
+            // Check if data is loaded successfully
             if (allData.isEmpty()) {
                 System.err.println("No data loaded from file: " + dataPath);
                 return;

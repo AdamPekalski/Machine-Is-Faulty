@@ -3,11 +3,13 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 
+// This class represents the result panel of the GUI, where the prediction results are displayed.
 public class ResultPanel extends JPanel {
     private JLabel resultLabel;
     private JLabel statusLabel;
     private JLabel recommendationLabel;
 
+    // Constructor initializes the result panel with labels for displaying results
     public ResultPanel() {
         setLayout(new GridLayout(3, 1));
         setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
@@ -28,6 +30,7 @@ public class ResultPanel extends JPanel {
         add(recommendationLabel);
     }
     
+    // Method to update the result based on the prediction
     public void updateResult(boolean isFaulty) {
         if (isFaulty) {
             statusLabel.setText("MACHINE IS FAULTY");

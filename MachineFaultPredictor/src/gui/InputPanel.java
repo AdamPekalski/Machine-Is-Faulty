@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+// This class represents the input panel of the GUI, where users can select various machine conditions
 public class InputPanel extends JPanel {
     private JCheckBox powerSurgeCheck;
     private JCheckBox coolingFailureCheck;
@@ -13,6 +14,7 @@ public class InputPanel extends JPanel {
     private JButton predictButton;
     private MainFrame mainFrame;
 
+    // Constructor initializes the input panel with checkboxes and a button
     public InputPanel(MainFrame mainFrame) {
         this.mainFrame = mainFrame;
         setLayout(new GridLayout(5, 1, 10, 10));
@@ -41,6 +43,7 @@ public class InputPanel extends JPanel {
         add(predictButton);
     }
     
+    // Method to handle prediction logic when the button is clicked
     private void makePrediction() {
         mainFrame.makePrediction(
             powerSurgeCheck.isSelected(),

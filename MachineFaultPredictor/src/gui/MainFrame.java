@@ -5,11 +5,13 @@ import java.awt.*;
 import ml.ModelTrainer;
 import data.MachineData;
 
+// This class represents the main frame of the GUI application for predicting machine faults.
 public class MainFrame extends JFrame {
     private InputPanel inputPanel;
     private ResultPanel resultPanel;
     private ModelTrainer trainer;
 
+    // Constructor initializes the main frame with input and result panels
     public MainFrame(ModelTrainer trainer) {
         this.trainer = trainer;
         setTitle("Machine Fault Predictor");
@@ -31,6 +33,7 @@ public class MainFrame extends JFrame {
         setLocationRelativeTo(null);
     }
     
+    // Method to make a prediction based on user input from the input panel
     public void makePrediction(boolean powerSurge, boolean coolingFailure, 
                              boolean sensorError, boolean manualOverride) {
         MachineData data = new MachineData(powerSurge, coolingFailure, 

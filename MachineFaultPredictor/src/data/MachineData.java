@@ -1,5 +1,7 @@
 package data;
 
+// This class represents the data structure for machine status and errors.
+// It contains boolean flags for various conditions that can occur in a machine.
 public class MachineData {
     private boolean powerSurge;
     private boolean coolingFailure;
@@ -7,6 +9,7 @@ public class MachineData {
     private boolean manualOverride;
     private boolean isFaulty;
 
+    // Constructor
     public MachineData(boolean powerSurge, boolean coolingFailure, 
                       boolean sensorError, boolean manualOverride, boolean isFaulty) {
         this.powerSurge = powerSurge;
