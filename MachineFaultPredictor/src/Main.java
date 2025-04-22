@@ -13,7 +13,7 @@ public class Main {
         
         try {
             // Load and prepare data
-            String dataPath = "data/predictive_dataset.csv";
+            String dataPath = "data/rule_based_predictive_dataset.csv";
             List<MachineData> allData = preprocessor.loadData(dataPath);
             
             if (allData.isEmpty()) {
