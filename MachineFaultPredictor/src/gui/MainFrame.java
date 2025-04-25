@@ -2,19 +2,18 @@ package gui;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import ml.ModelTrainer;
 import ml.DataPreprocessor;
 import data.MachineData;
 import java.util.List;
 
 public class MainFrame extends JFrame {
-    private InputPanel inputPanel;
-    private ResultPanel resultPanel;
+    private PredictionPanel predictionPanel;
+    private AddDataPanel addDataPanel;
     private JButton trainButton;
     private ModelTrainer trainer;
     private DataPreprocessor preprocessor;
+    private List<MachineData> dataset;
 
     public MainFrame(ModelTrainer trainer) {
         this.trainer = trainer;
@@ -23,44 +22,43 @@ public class MainFrame extends JFrame {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLayout(new BorderLayout());
 
+        // Load the dataset
+        String dataPath = "data/rule_based_predictive_dataset.csv";
+        this.dataset = preprocessor.loadData(dataPath);
+
         // Create panels
-        inputPanel = new InputPanel(this);
-        resultPanel = new ResultPanel();
+        predictionPanel = new PredictionPanel(this);
+        addDataPanel = new AddDataPanel(dataset);
 
         // Create "Train Classifier" button
         trainButton = new JButton("Train Classifier");
-        trainButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                trainClassifier();
-            }
-        });
+        trainButton.addActionListener(e -> trainClassifier());
+
+        // Create tabbed pane
+        JTabbedPane tabbedPane = new JTabbedPane();
+        tabbedPane.addTab("Predict & Results", predictionPanel);
+        tabbedPane.addTab("Add Data", addDataPanel);
 
         // Add components to frame
-        add(inputPanel, BorderLayout.CENTER);
-        add(resultPanel, BorderLayout.SOUTH);
-        add(trainButton, BorderLayout.NORTH);
+        add(tabbedPane, BorderLayout.CENTER);
+        add(trainButton, BorderLayout.SOUTH);
 
         // Set window properties
-        setMinimumSize(new Dimension(400, 300));
-        setPreferredSize(new Dimension(500, 400));
+        setMinimumSize(new Dimension(700, 500));
+        setPreferredSize(new Dimension(800, 600));
         pack();
         setLocationRelativeTo(null);
     }
 
     private void trainClassifier() {
         try {
-            // Load dataset
-            String dataPath = "data/rule_based_predictive_dataset.csv";
-            List<MachineData> allData = preprocessor.loadData(dataPath);
-
-            if (allData.isEmpty()) {
+            if (dataset.isEmpty()) {
                 JOptionPane.showMessageDialog(this, "Dataset is empty!", "Error", JOptionPane.ERROR_MESSAGE);
                 return;
             }
 
             // Split data into training and test sets
-            List<MachineData>[] splitData = ModelTrainer.splitData(allData, 0.8);
+            List<MachineData>[] splitData = ModelTrainer.splitData(dataset, 0.8);
             List<MachineData> trainingData = splitData[0];
             List<MachineData> testData = splitData[1];
 
@@ -71,7 +69,7 @@ public class MainFrame extends JFrame {
             double accuracy = trainer.evaluate(testData);
 
             // Update accuracy in the GUI
-            resultPanel.updateAccuracy(accuracy);
+            predictionPanel.updateAccuracy(accuracy);
 
             JOptionPane.showMessageDialog(this, "Classifier trained successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception ex) {
@@ -81,8 +79,13 @@ public class MainFrame extends JFrame {
     }
 
     public void makePrediction(boolean powerSurge, boolean coolingFailure, boolean sensorError, boolean manualOverride) {
+        if (!trainer.isTrained()) {
+            JOptionPane.showMessageDialog(this, "Please train the model before making predictions.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
         MachineData data = new MachineData(powerSurge, coolingFailure, sensorError, manualOverride, false);
         boolean isFaulty = trainer.predict(data);
-        resultPanel.updateResult(isFaulty);
+        predictionPanel.updateResult(isFaulty);
     }
 }

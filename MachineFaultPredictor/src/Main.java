@@ -1,18 +1,13 @@
-import ml.DataPreprocessor;
-import ml.ModelTrainer;
-import gui.MainFrame;
-import data.MachineData;
-import java.util.List;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import gui.MainFrame;
+import ml.ModelTrainer;
 
 public class Main {
     public static void main(String[] args) {
-        // Initialize components
-        DataPreprocessor preprocessor = new DataPreprocessor();
-        ModelTrainer trainer = new ModelTrainer();
-
+        // Launch the GUI
         SwingUtilities.invokeLater(() -> {
-            MainFrame frame = new MainFrame(trainer);
+            MainFrame frame = new MainFrame(new ModelTrainer());
             frame.setVisible(true);
         });
     }
