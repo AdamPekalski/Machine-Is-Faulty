@@ -36,7 +36,7 @@ Throughout the project, I tried to stick to Java convention as much as possible,
 ### GUI Package
 
 #### 7. MainFrame.java
-   -Main GUI frame that integrates all panels and manages user interactions.
+   - Main GUI frame that integrates all panels and manages user interactions.
 
 #### 8. PredictionPanel.java
    - GUI panel for making predictions and displaying results.
