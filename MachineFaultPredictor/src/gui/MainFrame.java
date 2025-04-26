@@ -3,6 +3,7 @@ package gui;
 import javax.swing.*;
 import java.awt.*;
 import ml.ModelTrainer;
+import ml.PredictorAccuracy;
 import ml.DataPreprocessor;
 import data.MachineData;
 import java.util.List;
@@ -10,6 +11,7 @@ import java.util.List;
 public class MainFrame extends JFrame {
     private PredictionPanel predictionPanel;
     private AddDataPanel addDataPanel;
+    private ResultsPanel resultsPanel;
     private JButton trainButton;
     private ModelTrainer trainer;
     private DataPreprocessor preprocessor;
@@ -26,9 +28,21 @@ public class MainFrame extends JFrame {
         String dataPath = "data/rule_based_predictive_dataset.csv";
         this.dataset = preprocessor.loadData(dataPath);
 
+        // Split the dataset
+        List<MachineData>[] splitData = PredictorAccuracy.splitDataset(dataset);
+        List<MachineData> trainingSet = splitData[0];
+        List<MachineData> testingSet = splitData[1];
+
+        // Train the model and calculate accuracies
+        trainer.train(trainingSet);
+        double testingSetAccuracy = trainer.evaluate(testingSet);
+        double overallAccuracy = trainer.evaluate(dataset);
+
         // Create panels
         predictionPanel = new PredictionPanel(this);
+        predictionPanel.updateOverallAccuracy(overallAccuracy); // Pass overall accuracy
         addDataPanel = new AddDataPanel(dataset);
+        resultsPanel = new ResultsPanel(trainingSet.size(), testingSet.size(), testingSetAccuracy, overallAccuracy);
 
         // Create "Train Classifier" button
         trainButton = new JButton("Train Classifier");
@@ -38,6 +52,7 @@ public class MainFrame extends JFrame {
         JTabbedPane tabbedPane = new JTabbedPane();
         tabbedPane.addTab("Predict & Results", predictionPanel);
         tabbedPane.addTab("Add Data", addDataPanel);
+        tabbedPane.addTab("Training & Testing Results", resultsPanel);
 
         // Add components to frame
         add(tabbedPane, BorderLayout.CENTER);
@@ -58,7 +73,7 @@ public class MainFrame extends JFrame {
             }
 
             // Split data into training and test sets
-            List<MachineData>[] splitData = ModelTrainer.splitData(dataset, 0.8);
+            List<MachineData>[] splitData = PredictorAccuracy.splitDataset(dataset);
             List<MachineData> trainingData = splitData[0];
             List<MachineData> testData = splitData[1];
 
@@ -66,10 +81,18 @@ public class MainFrame extends JFrame {
             trainer.train(trainingData);
 
             // Evaluate the model
-            double accuracy = trainer.evaluate(testData);
+            double testingSetAccuracy = trainer.evaluate(testData);
+            double overallAccuracy = trainer.evaluate(dataset);
 
-            // Update accuracy in the GUI
-            predictionPanel.updateAccuracy(accuracy);
+            // Update ResultsPanel
+            resultsPanel = new ResultsPanel(trainingData.size(), testData.size(), testingSetAccuracy, overallAccuracy);
+
+            // Update PredictionPanel with overall accuracy
+            predictionPanel.updateOverallAccuracy(overallAccuracy);
+
+            // Refresh the GUI
+            JTabbedPane tabbedPane = (JTabbedPane) getContentPane().getComponent(0);
+            tabbedPane.setComponentAt(2, resultsPanel);
 
             JOptionPane.showMessageDialog(this, "Classifier trained successfully!", "Success", JOptionPane.INFORMATION_MESSAGE);
         } catch (Exception ex) {
@@ -79,13 +102,19 @@ public class MainFrame extends JFrame {
     }
 
     public void makePrediction(boolean powerSurge, boolean coolingFailure, boolean sensorError, boolean manualOverride) {
+        // Check if the model is trained
         if (!trainer.isTrained()) {
             JOptionPane.showMessageDialog(this, "Please train the model before making predictions.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+        // Create a MachineData object with the input features
         MachineData data = new MachineData(powerSurge, coolingFailure, sensorError, manualOverride, false);
+
+        // Predict whether the machine is faulty
         boolean isFaulty = trainer.predict(data);
+
+        // Update the PredictionPanel with the result
         predictionPanel.updateResult(isFaulty);
     }
 }

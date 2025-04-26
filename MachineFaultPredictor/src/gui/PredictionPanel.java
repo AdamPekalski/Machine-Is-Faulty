@@ -14,7 +14,7 @@ public class PredictionPanel extends JPanel {
     private JLabel resultLabel;
     private JLabel statusLabel;
     private JLabel recommendationLabel;
-    private JLabel accuracyLabel; // New label for accuracy
+    private JLabel overallAccuracyLabel; // Updated to display overall accuracy
     private MainFrame mainFrame;
 
     public PredictionPanel(MainFrame mainFrame) {
@@ -50,13 +50,13 @@ public class PredictionPanel extends JPanel {
         statusLabel.setFont(new Font("Arial", Font.BOLD, 16));
         recommendationLabel = new JLabel("", SwingConstants.CENTER);
         recommendationLabel.setFont(new Font("Arial", Font.PLAIN, 12));
-        accuracyLabel = new JLabel("Model Accuracy: N/A", SwingConstants.CENTER); // Initialize accuracy label
-        accuracyLabel.setFont(new Font("Arial", Font.PLAIN, 12));
+        overallAccuracyLabel = new JLabel("Overall Model Accuracy: N/A", SwingConstants.CENTER); // Updated label
+        overallAccuracyLabel.setFont(new Font("Arial", Font.PLAIN, 12));
 
         resultPanel.add(resultLabel);
         resultPanel.add(statusLabel);
         resultPanel.add(recommendationLabel);
-        resultPanel.add(accuracyLabel); // Add accuracy label
+        resultPanel.add(overallAccuracyLabel); // Add overall accuracy label
 
         // Add input and result panels to the main panel
         add(inputPanel, BorderLayout.NORTH);
@@ -84,7 +84,7 @@ public class PredictionPanel extends JPanel {
         }
     }
 
-    public void updateAccuracy(double accuracy) {
-        accuracyLabel.setText(String.format("Model Accuracy: %.2f%%", accuracy * 100));
+    public void updateOverallAccuracy(double overallAccuracy) {
+        overallAccuracyLabel.setText(String.format("Overall Model Accuracy: %.2f%%", overallAccuracy * 100));
     }
 }
